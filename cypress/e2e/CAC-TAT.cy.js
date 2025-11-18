@@ -45,7 +45,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   // Teste de campo obrigatório - telefone se torna obrigatório quando o checkbox é marcado
-  it.only('exibe erro quando telefone obrigatório não é preenchido', () => {
+  it('exibe erro quando telefone obrigatório não é preenchido', () => {
     cy.get('#firstName').type('Ana')
     cy.get('#lastName').type('Teixeira')
     cy.get('#email').type('anateixeira.tester@gmail.com')
@@ -155,5 +155,33 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       .last()
       .uncheck()
       .should('not.be.checked')
-  })  
+  })
+
+  // Seleciona um arquivo da pasta fixtures
+  it('seleciona um arquivo da pasta fixtures', () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json') // Usa selectFile para fazer o upload
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json') // Depois que o upload ocorre, validamos o nome do arquivo
+      })
+  })
+
+  // Seleciona um arquivo simulando um drag-and-drop
+  it.only('seleciona um arquivo simulando um drag-and-drop', () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json', { action: 'drag-drop' }) // A opção action: 'drag-drop' simula arrastar e soltar
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json') // Verifica que o arquivo correto foi enviado
+      })
+  })
+
+  // Seleciona um arquivo utilizando uma fixture com alias
+  it.only('seleciona um arquivo utilizando uma fixture com alias', () => {
+    cy.fixture('example.json').as('arquivo')  // Carrega a fixture e cria um alias para ela
+    cy.get('#file-upload')  // Seleciona o input de arquivo
+      .selectFile('@arquivo')  // Usa o alias para selecionar o arquivo
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json') // Valida que o nome do arquivo está correto
+      })
+  })
 })
