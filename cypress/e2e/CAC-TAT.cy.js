@@ -120,6 +120,31 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       .should('have.value', 'blog') // Verifica o valor selecionado
   })
 
+  // Seleção de tipo de atendimento
+  it('marca o tipo de atendimento "Feedback"', () => {
+    cy.get('input[type="radio"][value="feedback"]') // Marca botão "Feedback"
+      .check()
+      .should('be.checked')
+  })
 
+  // Array com todos os valores dos tipos de atendimento
+  it('marca cada tipo de atendimento', () => {
+    const tiposAtendimento = ['ajuda', 'elogio', 'feedback']
 
+    // Para cada tipo de atendimento, marca e verifica
+    tiposAtendimento.forEach(tipo => {
+      cy.get(`input[type="radio"][value="${tipo}"]`) // Seleciona cada radio button
+        .check()
+        .should('be.checked') // Verifica se está marcado
+    })
+  })
+
+  it('marca cada tipo de atendimento', () => {
+    cy.get('input[type="radio"]') // Primeiro obtém todos os radio buttons
+      .each(typeOfService => {
+        cy.wrap(typeOfService) // Usa cy.wrap() para converter o elemento jQuery em objeto Cypress
+          .check() // Marca o radio button
+          .should('be.checked') // Verifica se está marcado
+      })
+  })
 })
