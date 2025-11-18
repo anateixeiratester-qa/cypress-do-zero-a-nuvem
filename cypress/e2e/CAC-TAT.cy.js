@@ -45,12 +45,12 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   // Teste de campo obrigatório - telefone se torna obrigatório quando o checkbox é marcado
-  it('exibe erro quando telefone obrigatório não é preenchido', () => {
+  it.only('exibe erro quando telefone obrigatório não é preenchido', () => {
     cy.get('#firstName').type('Ana')
     cy.get('#lastName').type('Teixeira')
     cy.get('#email').type('anateixeira.tester@gmail.com')
     cy.get('#open-text-area').type('Teste de feedback')
-    cy.get('#phone-checkbox').click() // marca checkbox que torna telefone obrigatório
+    cy.get('#phone-checkbox').check() // marca checkbox que torna telefone obrigatório
     cy.contains('button', 'Enviar').click()
 
     cy.get('.error').should('be.visible')
@@ -147,4 +147,13 @@ describe('Central de Atendimento ao Cliente TAT', () => {
           .should('be.checked') // Verifica se está marcado
       })
   })
+
+  it('marca ambos checkboxes, depois desmarca o último', () => {
+    cy.get('input[type="checkbox"]') // Seleciona todos os checkboxes e marca ambos
+      .check()
+      .should('be.checked')
+      .last()
+      .uncheck()
+      .should('not.be.checked')
+  })  
 })
